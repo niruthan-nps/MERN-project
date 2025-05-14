@@ -52,7 +52,7 @@ exports.updateProduct = async (req,res,next) => {
 
     
 }
-        product = await product.findByIdAndUpdate(req.params.id, req.body, {
+        product = await Product.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,
        
