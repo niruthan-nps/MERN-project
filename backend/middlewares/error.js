@@ -1,3 +1,5 @@
+
+/**In Express, **any middleware function with 4 arguments** (`err, req, res, next`) is **automatically recognized as an error handler*/
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
      res.status(err.statusCode).json({
@@ -5,3 +7,38 @@ module.exports = (err, req, res, next) => {
         message: err.message
      })
 }
+
+/**
+- Sends the error response back to the client.
+- `res.status(err.statusCode)` sets the HTTP response code (e.g., 400, 404, 500).
+- The body is a JSON object with:
+  - `success: false` — indicating the operation failed.
+  - `message: err.message` — gives a human-readable error message.
+
+
+1.Imagine you have this in a controller:
+if (!product) {
+    return next(new ErrorHandler("Product not found", 404));
+}
+
+2. Your error handler class
+class ErrorHandler extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.statusCode = statusCode;
+        Error.captureStackTrace(this, this.constructor);
+    }
+}
+
+3.Then the error middleware you posted will:
+--Catch the ErrorHandler object
+--Use its message and statusCode
+--Send a JSON response like:
+    {
+        "success": false,
+        "message": "Product not found"
+    }
+
+*/
+
+
