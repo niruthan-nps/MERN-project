@@ -22,7 +22,7 @@ exports.newProduct = async (req,res,next) => {
 
 //get single product - api/v1/product/:id
 exports.getSingleProduct = async (req,res,next) => {
-    
+    console.log("Product ID received:", req.params.id);
     const product = await Product.findById(req.params.id);
     
     if(!product){
