@@ -1,10 +1,12 @@
+const { stack } = require("../app");
 
 /**In Express, **any middleware function with 4 arguments** (`err, req, res, next`) is **automatically recognized as an error handler*/
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
      res.status(err.statusCode).json({
         success: false,
-        message: err.message
+        message: err.message,
+        stack:err.stack
      })
 }
 
