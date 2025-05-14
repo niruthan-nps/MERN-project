@@ -82,8 +82,11 @@ exports.deleteProduct = async (req,res,next) => {
         message: 'Product not found'
     });
 }
-    await product.remove();
-
+    // await product.remove();
+    
+    await product.deleteOne();
+    //mongoose 7 and above method to delete a document
+    //product.remove() is deprecated in mongoose 7 and above
 
 
     res.status(200).json({
