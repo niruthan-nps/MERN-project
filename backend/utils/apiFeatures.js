@@ -20,13 +20,16 @@ class APIFeatures {
     filter(){
         const queryStrCopy = {...this.queryStr};
         // Create a copy of the query string to avoid mutating the original
-        console.log(queryStrCopy); //before removing fields
+        // console.log(queryStrCopy); //before removing fields
 
         const removeFields = ['keyword', 'page', 'llimit'];
         // Define fields to be removed from the query string
         removeFields.forEach(field => delete queryStrCopy[field]);
 
-        console.log(queryStrCopy); //after removing fields
+        // console.log(queryStrCopy); //after removing fields
+
+        this.query.find(queryStrCopy);
+        return this; // Return the current instance for method chaining
     }
 }
 
