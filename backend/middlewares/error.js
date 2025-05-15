@@ -1,5 +1,6 @@
 const { stack } = require("../app");
 
+
 /**In Express, **any middleware function with 4 arguments** (`err, req, res, next`) is **automatically recognized as an error handler*/
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
@@ -8,14 +9,24 @@ module.exports = (err, req, res, next) => {
         res.status(err.statusCode).json({
         success: false,
         message: err.message,
-        stack:err.stack
+        stack:err.stack,
+        error: err,
      })
     }
 
     if(process.env.NODE_ENV == 'production'){
+
+        let message = err.message;
+        //Mongoose bad ObjectId error
+        let error = {...err};
+
+        if(err.name === 'validationError'){
+            message = Object.values(err.errors).map(value => value.message);
+            error = new Error(message, 400);
+        }
         res.status(err.statusCode).json({
         success: false,
-        message: err.message
+        message: error.message || 'Internal Server Error',
      })
     }
 }
