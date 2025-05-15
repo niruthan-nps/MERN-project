@@ -18,16 +18,23 @@ module.exports = (err, req, res, next) => {
 
         let message = err.message;
         //Mongoose bad ObjectId error
-        let error = {...err};
+        let error = new Error(message);
 
         if(err.name === 'ValidationError'){
             message = Object.values(err.errors).map(value => value.message);
             error = new Error(message, 400);
         }
+
+        if(err.name === 'CastError'){
+            message = `Resource not found. Invalid: ${err.path}`;
+            error = new Error(message, 400);
+        }//object id mismatch error
+
+
         res.status(err.statusCode).json({
         success: false,
-        // message: error.message || 'Internal Server Error',
-        message
+        message: error.message || 'Internal Server Error',
+        // message
      })
     }
 }
