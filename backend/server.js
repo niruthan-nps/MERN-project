@@ -5,7 +5,7 @@ const connectDatabase = require('./config/database');
 
 
 dotenv.config({ path:path.join(__dirname, "config/config.env" )});// need to set absolute path of this file not the relative path
-
+console.log('Environment:', process.env.NODE_ENV); // will reflect dev/prod based on script
 connectDatabase();
  //connect to database
 app.listen(process.env.PORT, () => {
