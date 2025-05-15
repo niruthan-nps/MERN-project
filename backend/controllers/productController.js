@@ -13,14 +13,14 @@ exports.getProducts = async (req,res,next) => {
     });
 }
 //create new product - api/v1/product/new
-exports.newProduct = async (req,res,next) => {
+exports.newProduct = catchAsyncError(async (req,res,next) => {
     const product = await Product.create(req.body);
     res.status(201).json({
         success: true,
         product
     });
    
-}
+});
 
 //get single product - api/v1/product/:id
 exports.getSingleProduct = async (req,res,next) => {

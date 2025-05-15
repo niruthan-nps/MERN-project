@@ -20,7 +20,7 @@ module.exports = (err, req, res, next) => {
         //Mongoose bad ObjectId error
         let error = {...err};
 
-        if(err.name === 'validationError'){
+        if(err.name === 'ValidationError'){
             message = Object.values(err.errors).map(value => value.message);
             error = new Error(message, 400);
         }
