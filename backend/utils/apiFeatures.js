@@ -17,25 +17,7 @@ class APIFeatures {
         return this; // Return the current instance for method chaining
     }
 
-    // filter(){
-    //     const queryStrCopy = {...this.queryStr};
-    //     // Create a copy of the query string to avoid mutating the original
-        
-
-
-    //     const removeFields = ['keyword', 'page', 'limit'];
-    //     // Define fields to be removed from the query string
-    //     removeFields.forEach(field => delete queryStrCopy[field]);
-
-        
-
-    //     this.query.find(queryStrCopy);
-
-    //     console.log(queryStrCopy);
-
-    //     return this; // Return the current instance for method chaining
-    // 
-    // }
+    
 
 //     filter() {
 //     const queryStrCopy = { ...this.queryStr };
