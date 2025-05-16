@@ -20,52 +20,96 @@ class APIFeatures {
     // filter(){
     //     const queryStrCopy = {...this.queryStr};
     //     // Create a copy of the query string to avoid mutating the original
-    //     // console.log(queryStrCopy); //before removing fields
+        
 
-    //     const removeFields = ['keyword', 'page', 'llimit'];
+
+    //     const removeFields = ['keyword', 'page', 'limit'];
     //     // Define fields to be removed from the query string
     //     removeFields.forEach(field => delete queryStrCopy[field]);
-
-    //     // let queryStr = JSON.stringify(queryStrCopy);
-    //     // // Convert the query string object to a JSON string
-    //     // queryStr = queryStr.replace(/\b(gt|gte|lt|lte)/g, match => `$${match}`);
-    //     // // Replace comparison operators (gt, gte, lt, lte) with MongoDB operators ($gt, $gte, $lt, $lte)
-    //     console.log(queryStrCopy); //after replacing operators
 
         
 
     //     this.query.find(queryStrCopy);
+
+    //     console.log(queryStrCopy);
+
     //     return this; // Return the current instance for method chaining
+    // 
     // }
 
-    filter() {
+//     filter() {
+//     const queryStrCopy = { ...this.queryStr };
+
+//     // Remove fields that are not used for filtering
+//     const removeFields = ['keyword', 'page', 'limit'];
+//     removeFields.forEach(field => delete queryStrCopy[field]);
+
+//     const mongoFilter = {};
+
+//     // Convert `price[gt]` to { price: { $gt: value } }
+//     Object.entries(queryStrCopy).forEach(([key, value]) => {
+//     const match = key.match(/^(.+)\[(.+)\]$/); // matches key[operator]
+//     if (match) {
+//       const field = match[1];
+//       const operator = match[2];
+
+//       if (!mongoFilter[field]) {
+//         mongoFilter[field] = {};
+//       }
+
+//       mongoFilter[field][`$${operator}`] = isNaN(value) ? value : Number(value);
+//     } else {
+//       mongoFilter[key] = isNaN(value) ? value : Number(value);
+//     }
+//     });
+
+//     this.query = this.query.find(mongoFilter);
+
+//     console.log('MongoDB Filter:', mongoFilter); // Debug output
+
+//   return this;
+// }
+
+filter() {
     const queryStrCopy = { ...this.queryStr };
 
-    const removeFields = ['keyword', 'page', 'llimit'];
+    // Remove fields that are not used for filtering
+    const removeFields = ['keyword', 'page', 'limit'];
     removeFields.forEach(field => delete queryStrCopy[field]);
 
-    // ✅ Validate operators
-    const allowedOperators = ['gt', 'gte', 'lt', 'lte'];
-    for (const key in queryStrCopy) {
-        if (typeof queryStrCopy[key] === 'object') {
-            for (const op in queryStrCopy[key]) {
-                if (!allowedOperators.includes(op)) {
-                    throw new Error(`Invalid query operator: ${op}`);
-                }
+    // Construct the proper MongoDB filter object
+    const mongoFilter = {};
+
+    for (let key in queryStrCopy) {
+        // Check for keys like price[gt], price[lte], etc.
+        const match = key.match(/^(\w+)\[(gte|gt|lte|lt)\]$/);
+
+        if (match) {
+            const field = match[1]; // e.g., "price"
+            const operator = match[2]; // e.g., "gt"
+
+            // Initialize field if not present
+            if (!mongoFilter[field]) {
+                mongoFilter[field] = {};
             }
+
+            // Convert value to number if applicable
+            const value = isNaN(queryStrCopy[key]) ? queryStrCopy[key] : Number(queryStrCopy[key]);
+
+            mongoFilter[field][`$${operator}`] = value;
+        } else {
+            // Normal field (e.g., category=electronics)
+            const value = isNaN(queryStrCopy[key]) ? queryStrCopy[key] : Number(queryStrCopy[key]);
+            mongoFilter[key] = value;
         }
     }
 
-    // ✅ Convert to MongoDB operators
-    let queryStr = JSON.stringify(queryStrCopy);
-    queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
-    const mongoQueryObj = JSON.parse(queryStr);
-
-    this.query.find(mongoQueryObj);
+    // Apply to Mongoose query
+    this.query = this.query.find(mongoFilter);
 
     return this;
 }
 
 }
 
-module.exports = APIFeatures;
+ module.exports = APIFeatures;
