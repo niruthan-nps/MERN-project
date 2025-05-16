@@ -26,7 +26,7 @@ class APIFeatures {
         // Define fields to be removed from the query string
         removeFields.forEach(field => delete queryStrCopy[field]);
 
-        // console.log(queryStrCopy); //after removing fields
+        console.log(queryStrCopy); //after removing fields
 
         this.query.find(queryStrCopy);
         return this; // Return the current instance for method chaining
