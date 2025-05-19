@@ -42,6 +42,7 @@ const productSchema = new mongoose.Schema({
         enum : {
             values: [
                 'Electronics',
+                'Mobile Phones',
                 'Laptops',
                 'Accessories',
                 'Headphones',
@@ -95,5 +96,5 @@ const productSchema = new mongoose.Schema({
 let schema = mongoose.model('Product', productSchema);
 //This creates a Mongoose model called "Product" using the schema productSchema
 /**You're importing the mongoose library, then defining a schema productSchema using mongoose.Schema() to describe what a product should look like. Finally, you register this schema as a model named "Product" using mongoose.model(), which allows you to interact with the MongoDB collection for products */
-
+//From this ('Product', productSchema) mongoDB it self creates a collection named 'products' in the database. Mongoose automatically pluralizes the model name to create the collection name. So, if your model is named 'Product', Mongoose will look for a collection named 'products' in the database.
 module.exports = schema;
