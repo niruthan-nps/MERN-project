@@ -38,3 +38,4 @@ const userSchema = new mongoose.Schema({
 
 let model = mongoose.model('User', userSchema);
 module.exports = model;
+//added test comment to check git
