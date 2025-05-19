@@ -90,7 +90,15 @@ filter() {
     this.query = this.query.find(mongoFilter);
 
     return this;
+
 }
+    paginate(resPerPage){
+        const currentPage = Number(this.queryStr.page) || 1; // Default to page 1 if not provided;
+        const skip = resPerPage * (currentPage - 1); // Calculate the number of documents to skip
+        this.query.limit(resPerPage).skip(skip); // Limit the number of documents returned and skip the calculated number
+        return this; // Return the current instance
+
+    }
 
 }
 
