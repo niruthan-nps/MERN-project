@@ -16,3 +16,13 @@ exports.isAuthenticatedUser = catchAsyncError( async (req, res, next) => {
     next();
 
 })
+
+
+exports.authorizeRoles = (...roles) => { //s an array of allowed roles passed to the middleware
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return next(new ErrorHandler(`Role ${req.user.role} is not allowed to access this resource`,401));
+        }
+        next(); // continue if the role is allowed
+    };
+};
