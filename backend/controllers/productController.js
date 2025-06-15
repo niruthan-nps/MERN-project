@@ -17,6 +17,10 @@ exports.getProducts = async (req,res,next) => {
 }
 //create new product - api/v1/product/new
 exports.newProduct = catchAsyncError(async (req,res,next) => {
+
+    req.body.user = req.user.id; /** goes to isAuthenticatedUser in product route, 
+    the  isAuthenticatedUser middleware checks if the user is authenticated and adds the user object to the request
+    req.user.id is the id of the user who is creating the product **/
     const product = await Product.create(req.body);
     res.status(201).json({
         success: true,
