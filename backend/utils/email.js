@@ -21,11 +21,9 @@ const sendEmail = async option => {
         subject: option.subject,
         text: option.message
     };
-    await transporter.sendEmail(message)
+    await transporter.sendMail(message)
 
 
 
 }
 module.exports = sendEmail;
-
-
