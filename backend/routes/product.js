@@ -10,10 +10,12 @@ const router = express.Router();//Hey Express, give me a new Router object so I 
 const { isAuthenticatedUser , authorizeRoles} = require('../middlewares/authenticate');
 
 router.route('/products').get(isAuthenticatedUser, getProducts);//router is the object created from Express module's one of the funtion named Router and the now we  are accessing route function from previously created router object
-router.route('/product/new').post(isAuthenticatedUser,authorizeRoles('admin'),newProduct);
 router.route('/product/:id').get(getSingleProduct);
 router.route('/product/:id').put(updateProduct);
 router.route('/product/:id').delete(deleteProduct);
+
+//admin routes
+router.route('/admin/product/new').post(isAuthenticatedUser,authorizeRoles('admin'),newProduct);
 
 
 

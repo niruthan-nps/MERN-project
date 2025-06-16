@@ -1,56 +1,124 @@
-const { stack } = require("../app");
+// const { stack } = require("../app");
 
 
-/**In Express, **any middleware function with 4 arguments** (`err, req, res, next`) is **automatically recognized as an error handler*/
-module.exports = (err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
+// /**In Express, **any middleware function with 4 arguments** (`err, req, res, next`) is **automatically recognized as an error handler*/
+// module.exports = (err, req, res, next) => {
+//     err.statusCode = err.statusCode || 500;
      
-    if(process.env.NODE_ENV == 'devolopment'){
+//     if(process.env.NODE_ENV == 'devolopment'){
+//         res.status(err.statusCode).json({
+//         success: false,
+//         message: err.message,
+//         stack:err.stack,
+//         error: err,
+//      })
+//     }
+
+//     if(process.env.NODE_ENV == 'production'){
+
+//         let message = err.message;
+//         //Mongoose bad ObjectId error
+//         let error = new Error(message);
+
+//         // if(err.name === 'ValidationError'){
+//         //     message = Object.values(err.errors).map(value => value.message);
+//         //     error = new Error(message,400);
+//         //     error.statusCode = 400; //Bad Request
+//         // }
+
+//         if (err.name === 'ValidationError') {
+//             err.message     = Object.values(err.errors).map(v => v.message).join(', ');
+//             err.statusCode  = 400;
+//             }
+
+        
+
+//         if(err.name === 'CastError'){
+//             message = `Resource not found. Invalid: ${err.path}`;
+//             error = new Error(message, 400);
+//         }//object id mismatch error
+
+//         if(err.code === 11000){
+//            let message = `Duplicate ${Object.keys(err.keyValue)} entered`;
+//             error = new Error(message);
+//         }
+
+//         if(err.name === 'JSONWebTokenError'){
+//             message = 'Json Web Token is invalid. Try again';
+//             error = new Error(message);
+//         }
+//         if(err.name === 'TokenExpiredError'){
+//             message = 'Json Web Token is expired. Try again';
+//             error = new Error(message);
+//         }
+
+//         res.status(err.statusCode).json({
+//         success: false,
+//         message: error.message || 'Internal Server Error',
+//         // message
+//      })
+//     }
+// }
+
+
+
+const ErrorHandler = require("../utils/errorHandler");
+
+module.exports = (err, req, res, next)=>{
+    err.statusCode = err.statusCode || 500;
+
+    if(process.env.NODE_ENV == "development"){
         res.status(err.statusCode).json({
-        success: false,
-        message: err.message,
-        stack:err.stack,
-        error: err,
-     })
+            success: "false",
+            message: err.message,
+            stack: err.stack,
+            error: err
+        })
     }
 
-    if(process.env.NODE_ENV == 'production'){
-
+    if(process.env.NODE_ENV == "production"){
         let message = err.message;
-        //Mongoose bad ObjectId error
         let error = new Error(message);
 
-        if(err.name === 'ValidationError'){
+        if(err.name == "ValidationError"){
             message = Object.values(err.errors).map(value => value.message);
-            error = new Error(message, 400);
+            error = new Error(message); 
+            err.statusCode =400;
         }
 
-        if(err.name === 'CastError'){
-            message = `Resource not found. Invalid: ${err.path}`;
-            error = new Error(message, 400);
-        }//object id mismatch error
-
-        if(err.code === 11000){
-           let message = `Duplicate ${Object.keys(err.keyValue)} entered`;
+        if(err.name== 'CastError'){
+            message = `Resource not found: ${err.path}`;
             error = new Error(message);
+            err.statusCode =400;
         }
 
-        if(err.name === 'JSONWebTokenError'){
-            message = 'Json Web Token is invalid. Try again';
+        if(err.code == 11000){
+            let message = `Duplicate key ${Object.keys(err.keyValue)} error`;
             error = new Error(message);
+            err.statusCode =400;
+
         }
-        if(err.name === 'TokenExpiredError'){
-            message = 'Json Web Token is expired. Try again';
+
+        if(err.name == 'JSONWebTokenError'){
+            let message = `JSON Web Token is invalid. try again`;
             error = new Error(message);
+            err.statusCode =400;
         }
+
+        if(err.name == 'TokenExpiredError'){
+            let message = `JSON Web Token is expired. try again`;
+            error = new Error(message);
+            err.statusCode =400;
+        }
+
 
         res.status(err.statusCode).json({
-        success: false,
-        message: error.message || 'Internal Server Error',
-        // message
-     })
+            success: "fasle",
+            message: error.message || "Internal Server error"
+        })
     }
 }
+
 
 /**
 - Sends the error response back to the client.
@@ -84,5 +152,3 @@ class ErrorHandler extends Error {
     }
 
 */
-
-
