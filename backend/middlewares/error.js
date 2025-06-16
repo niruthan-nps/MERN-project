@@ -30,6 +30,19 @@ module.exports = (err, req, res, next) => {
             error = new Error(message, 400);
         }//object id mismatch error
 
+        if(err.code === 11000){
+           let message = `Duplicate ${Object.keys(err.keyValue)} entered`;
+            error = new Error(message);
+        }
+
+        if(err.name === 'JSONWebTokenError'){
+            message = 'Json Web Token is invalid. Try again';
+            error = new Error(message);
+        }
+        if(err.name === 'TokenExpiredError'){
+            message = 'Json Web Token is expired. Try again';
+            error = new Error(message);
+        }
 
         res.status(err.statusCode).json({
         success: false,
