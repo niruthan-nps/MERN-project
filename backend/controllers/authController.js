@@ -128,11 +128,28 @@ exports.resetPassword = catchAsyncError(async (req,res,next) => {
 
 
 
-//get user details
+//get user profile - api/v1/myprofile
 exports.getUserProfile = catchAsyncError(async (req,res,next) => {
     const user = await User.findById(req.user.id)
     res.status(200).json({
         success: true,
         user
     })
+})
+
+
+//change password - api/v1/password/change
+exports.changePassword = catchAsyncError(async (req, res, next) => {
+     const user = await User.findById(req.user.id).select('+password');
+     //select('+password') is used to include the password field in the user object
+
+     if (!await user.isValidPassword(req.body.oldPassword)) {
+         return next(new ErrorHandler('Old password is incorrect', 401));
+     }
+
+     user.password = req.body.password;
+     await user.save();
+     res.status(200).json({
+         success: true
+     });
 })
