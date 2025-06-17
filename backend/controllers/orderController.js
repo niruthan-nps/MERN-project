@@ -1,6 +1,7 @@
 const catchAsyncError = require('../middlewares/catchAsyncError');
 const Order = require('../models/orderModel');
 const ErrorHandler = require('../utils/errorHandler');
+const Product = require('../models/productModel');
 
 
 //create new ordre - api/v1/orders/new
@@ -85,3 +86,42 @@ exports.orders = catchAsyncError(async (req, res, next) => {
     });
 
 })
+
+
+
+
+//update order status - admin - api/v1/admin/order/:id
+exports.updateOrder = catchAsyncError(async (req, res, next) => {
+
+    const order = await Order.findById(req.params.id);
+
+    if(!order){
+        return next(new ErrorHandler(`Order does not exist with id: ${req.params.id}`, 404));
+    }
+
+    if(order.orderStatus === 'Delivered'){
+        return next(new ErrorHandler('You have already delivered this order', 400));
+    }
+
+    //updating the stock - FIXED LOOP
+    for (const orderItem of order.orderItems) { // CHANGED: replaced forEach with for...of
+        await updateStock(orderItem.product, orderItem.quantity); // CHANGED: await added
+    }
+
+    order.orderStatus = req.body.orderStatus;
+    order.deliveredAt = Date.now();
+    await order.save();
+
+    res.status(200).json({
+        success: true,
+        order
+    });
+
+})
+
+// FIXED updateStock function
+async function updateStock (productId, quantity) {
+    const product = await Product.findById(productId);
+    product.stock = product.stock - quantity; // CHANGED: fixed 'process.stock' typo
+    await product.save({validateBeforeSave: false}); // CHANGED: added await
+}
