@@ -175,3 +175,15 @@ await product.save({ validateBeforeSave: false });
     });
 })
 
+
+//get all reviews of a product - api/v1/reviews ? {productId}
+exports.getReviews = catchAsyncError(async (req,res,next) => {
+    const product = await Product.findById(req.query.id);
+
+    res.status(200).json({
+        success: true,
+        reviews: product.reviews
+    });
+
+})
+
