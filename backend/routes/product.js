@@ -1,5 +1,5 @@
 const express = require('express');//import express module
-const { getProducts } = require('../controllers/productController');
+const { getProducts, createReview } = require('../controllers/productController');
 const { newProduct } = require('../controllers/productController');//importing the newProducts function from productController file
 const { getSingleProduct } = require('../controllers/productController')
 const { updateProduct } = require('../controllers/productController')
@@ -13,6 +13,7 @@ router.route('/products').get(isAuthenticatedUser, getProducts);//router is the 
 router.route('/product/:id').get(getSingleProduct);
 router.route('/product/:id').put(updateProduct);
 router.route('/product/:id').delete(deleteProduct);
+router.route('/review').put(isAuthenticatedUser,createReview)
 
 //admin routes
 router.route('/admin/product/new').post(isAuthenticatedUser,authorizeRoles('admin'),newProduct);
