@@ -187,3 +187,42 @@ exports.getReviews = catchAsyncError(async (req,res,next) => {
 
 })
 
+
+//delete review - api/v1/review
+exports.deleteReview = catchAsyncError(async (req,res,next) => {
+
+    const product = await Product.findById(req.query.productId);
+    
+
+    //filtering reviews to remove the review with the given id
+    const reviews = product.reviews.filter(review => {
+        return review._id.toString() !== req.query.id.toString();
+    })
+
+    //number of reviews
+    const numOfReviews = reviews.length;
+
+
+    //finding avg rating after filtering the reviews
+    let ratings = reviews.reduce((acc, review) => 
+        {acc + review.rating}, 0) / reviews.length;
+
+    ratings = isNaN(ratings) ? 0 : ratings;
+
+
+    //save product with updated reviews, ratings and numOfReviews
+    //using findByIdAndUpdate to update the product
+    //findByIdAndUpdate is a mongoose method that finds a document by id and updates
+    await Product.findByIdAndUpdate(req.query.productId, {
+        reviews,
+        ratings,
+        numOfReviews
+    })  
+    res.status(200).json({
+        success: true,
+        message: 'Review deleted successfully'
+    });
+
+
+})
+
