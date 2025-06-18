@@ -132,3 +132,24 @@ async function updateStock (productId, quantity) {
     product.stock = product.stock - quantity; // CHANGED: fixed 'process.stock' typo
     await product.save({validateBeforeSave: false}); // CHANGED: added await
 }
+
+
+//delete order - admin - api/v1/admin/order/:id
+exports.deleteOrder = catchAsyncError(async (req, res, next) => {
+
+    const order = await Order.findById(req.params.id);
+
+    if(!order){
+        return next(new ErrorHandler(`Order does not exist with id: ${req.params.id}`, 404));
+    }
+
+    await order.deleteOne();
+    //mongoose 7 and above method to delete a document
+    //order.remove() is deprecated in mongoose 7 and above
+
+    res.status(200).json({
+        success: true,
+        message: 'Order deleted successfully'
+    });
+
+})
