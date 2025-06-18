@@ -103,11 +103,11 @@ exports.updateOrder = catchAsyncError(async (req, res, next) => {
     // if(order.orderStatus === 'Delivered'){
     //     return next(new ErrorHandler('You have already delivered this order', 400));
     // }
-    console.log('Current status:', order.orderStatus);
+
     if (order.orderStatus.toLowerCase() === 'delivered') { // ✅ Made check case-insensitive
         return next(new ErrorHandler('You have already delivered this order', 400));
     }
-    console.log('Current status:', order.orderStatus);
+  
 
 
     //updating the stock - FIXED LOOP
