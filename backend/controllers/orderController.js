@@ -27,7 +27,8 @@ exports.newOrder = catchAsyncError(async (req, res, next) => {
         totalPrice,
         paymentInfo,
         paidAt: Date.now(),
-        user: req.user.id
+        user: req.user.id,
+        orderStatus: 'Processing'
     })
 
     res.status(201).json({
@@ -99,9 +100,15 @@ exports.updateOrder = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(`Order does not exist with id: ${req.params.id}`, 404));
     }
 
-    if(order.orderStatus === 'Delivered'){
+    // if(order.orderStatus === 'Delivered'){
+    //     return next(new ErrorHandler('You have already delivered this order', 400));
+    // }
+    console.log('Current status:', order.orderStatus);
+    if (order.orderStatus.toLowerCase() === 'delivered') { // ✅ Made check case-insensitive
         return next(new ErrorHandler('You have already delivered this order', 400));
     }
+    console.log('Current status:', order.orderStatus);
+
 
     //updating the stock - FIXED LOOP
     for (const orderItem of order.orderItems) { // CHANGED: replaced forEach with for...of
