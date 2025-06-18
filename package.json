@@ -5,16 +5,22 @@
   "main": "server.js",
   "scripts": {
     "start": "npx nodemon backend/server.js",
-  "dev": "cross-env NODE_ENV=devolopment nodemon backend/server.js",
-  "prod": "cross-env NODE_ENV=production nodemon backend/server.js",
-  "seeder": "node backend/utils/seeder.js"
+    "dev": "cross-env NODE_ENV=devolopment nodemon backend/server.js",
+    "prod": "cross-env NODE_ENV=production nodemon backend/server.js",
+    "seeder": "node backend/utils/seeder.js"
   },
   "author": "Niru",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "mongoose": "^8.14.2"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.2",
+    "nodemailer": "^7.0.3",
+    "validator": "^13.15.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
