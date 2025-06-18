@@ -101,3 +101,77 @@ exports.deleteProduct = async (req,res,next) => {
         message: 'Product deleted successfully'
     });
 }
+
+
+
+//create review  - api/v1/review
+exports.createReview = catchAsyncError(async (req,res,next) => {
+
+    const {productId, rating, comment} = req.body;
+    const review = {
+        user: req.user._id,
+        rating,
+        comment
+    };
+    const product = await Product.findById(productId);
+
+    const isReviewed = product.reviews.find(review => {
+        return review.user.toString() === req.user.id.toString();
+    })
+
+    /*  --------------------------------------------------------------
+    Either update an existing review by the current user, or add a
+    brand-new review, then recalculate the product’s average rating.
+    Assumes you already have:
+
+      const { rating, comment } = req.body;      // incoming data
+      const review = { rating, comment, user: req.user.id };
+      const isReviewed = product.reviews.some(
+        r => r.user.toString() === req.user.id.toString()
+      );
+---------------------------------------------------------------- */
+
+/* ──────────────────────────────────────────────────────────────
+   1.  UPDATE the review if the user already reviewed this product
+────────────────────────────────────────────────────────────────*/
+if (isReviewed) {
+  product.reviews.forEach(r => {
+    // Compare ObjectIds by string, because .equals() or == can fail
+    if (r.user.toString() === req.user.id.toString()) {
+      r.rating  = rating;   // overwrite the previous star value
+      r.comment = comment;  // overwrite the previous text comment
+    }
+  });
+
+/* ──────────────────────────────────────────────────────────────
+   2.  ADD the review if the user hasn’t reviewed before
+────────────────────────────────────────────────────────────────*/
+} else {
+  product.reviews.push(review);          // add to the array
+  product.numOfReviews = product.reviews.length; // keep count in sync
+}
+
+/* ──────────────────────────────────────────────────────────────
+   3.  RECALCULATE the average rating
+────────────────────────────────────────────────────────────────*/
+product.ratings =                       // overwrite the existing average
+  product.reviews
+    .reduce((sum, r) => sum + r.rating, 0)  // sum all ratings
+  / product.reviews.length;                // divide by # of reviews
+
+// Edge-case guard: if there are zero reviews, NaN → set to 0
+product.ratings = isNaN(product.ratings) ? 0 : product.ratings;
+
+/*  --------------------------------------------------------------
+    Later you’ll likely call:
+        await product.save({ validateBeforeSave: false });
+    or within Mongoose middleware, so the changes persist.
+---------------------------------------------------------------- */
+
+await product.save({ validateBeforeSave: false });
+    res.status(200).json({
+        success: true,
+        message: 'Review created successfully'
+    });
+})
+

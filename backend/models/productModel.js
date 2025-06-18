@@ -72,10 +72,14 @@ const productSchema = new mongoose.Schema({
     },
     reviews: [
         {
-            name: {
-                type: String,
-                required: true,
-            },
+            user: mongoose.Schema.Types.ObjectId,
+            // The 'user' field is defined as an ObjectId type, which is a reference to another document in MongoDB. This is typically used to link the review to a specific user in your application.
+            // This allows you to associate each review with a user who created it.
+            // This is useful for tracking who wrote the review and for displaying user information alongside the review
+            // In Mongoose, ObjectId is a special type that represents a unique identifier for documents
+            // in MongoDB. It is commonly used to reference other documents in a one-to-many
+            // or many-to-many relationship.
+            // In this case, it is used to reference the user who wrote the review.
             rating: {
                 type: Number,
                 required: true,
