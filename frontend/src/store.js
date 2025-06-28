@@ -15,9 +15,11 @@
 
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import productsReducer from "./slices/productsSlice";
 
 const reducer = combineReducers({
-  // Add your reducers here
+    productState: productsReducer
+
 });
 
 const store = configureStore({
@@ -26,3 +28,6 @@ const store = configureStore({
 });
 
 export default store;
+
+// `combineReducers`: lets you combine multiple reducer functions into one — useful when your app has multiple features (e.g., auth, products, cart).
+// `configureStore`: a smarter alternative to `createStore()` — sets up the Redux store with default middleware (like thunk) and development tools like Redux DevTools.
