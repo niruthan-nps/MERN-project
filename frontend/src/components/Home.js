@@ -1,8 +1,19 @@
 
 import { Fragment } from "react/jsx-runtime";
-import MetaData from "./MetaData";
+import MetaData from "./layouts/MetaData";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getProducts } from "../actions/productsActions";
 
 export default function Home() {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getProducts());
+    }, [dispatch]);
+
+
   return (
     <Fragment>
 
