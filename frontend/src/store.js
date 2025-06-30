@@ -18,7 +18,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import productsReducer from "./slices/productsSlice";
 
 const reducer = combineReducers({
-    productState: productsReducer
+    productsState: productsReducer
 
 });
 
