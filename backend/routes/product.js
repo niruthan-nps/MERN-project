@@ -9,7 +9,7 @@ const { deleteProduct } = require('../controllers/productController')
 const router = express.Router();//Hey Express, give me a new Router object so I can define some grouped routes in it.
 const { isAuthenticatedUser , authorizeRoles} = require('../middlewares/authenticate');
 
-router.route('/products').get(isAuthenticatedUser, getProducts);//router is the object created from Express module's one of the funtion named Router and the now we  are accessing route function from previously created router object
+router.route('/products').get( getProducts);//router is the object created from Express module's one of the funtion named Router and the now we  are accessing route function from previously created router object
 router.route('/product/:id').get(getSingleProduct);
 router.route('/product/:id').put(updateProduct);
 router.route('/product/:id').delete(deleteProduct);
