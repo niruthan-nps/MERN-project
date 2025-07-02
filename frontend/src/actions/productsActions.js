@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { productsFailure, productsRequest, productsSuccess } from '../slices/productsSlice';
+import { productsFail, productsRequest, productsSuccess } from '../slices/productsSlice';
 
 
 export const getProducts = () => async (dispatch) => {
@@ -9,7 +9,7 @@ export const getProducts = () => async (dispatch) => {
         const { data } = await axios.get('/api/v1/products');
     
         dispatch(productsSuccess(data));
-    } catch (error) {
-        dispatch(productsFailure(error.response.data.message));
+    }catch (error) {
+        dispatch(productsFail(error.response.data.message));
     }
 }
