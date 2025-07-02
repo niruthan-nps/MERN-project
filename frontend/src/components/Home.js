@@ -7,7 +7,6 @@ import { getProducts } from "../actions/productsActions";
 import Loader from "./layouts/Loader";
 import Product from "./product/Product";
 import { toast } from "react-toastify";
-import { POSITION } from 'react-toastify';
 
 
 export default function Home() {
