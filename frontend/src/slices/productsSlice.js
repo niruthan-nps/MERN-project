@@ -1,35 +1,32 @@
-import { createSlice } from "@reduxjs/toolkit";
+// import { createSlice } from "@reduxjs/toolkit";
 
-const productsSlice = createSlice({
-  name: "products",
-  initialState: {
-    loading: false
-  },
-  reducers: {
-    productsRequest(state, action) {
-        return {
-          loading: true
-        };
-    },
-    productsSuccess(state, action){
-      return {
-          loading: false,
-          products: action.payload.products};
-    },
-    productsFailure(state, action) {
-      return {
-          loading: false,
-          products: action.payload};
-    }
-  }
-});
+// const productsSlice = createSlice({
+//   name: "products",
+//   initialState: {
+//     loading: false
+//   },
+//   reducers: {
+//     productsRequest(state, action) {
+//         return {
+//           loading: true
+//         };
+//     },
+//     productsSuccess(state, action){
+//       return {
+//           loading: false,
+//           products: action.payload.products};
+//     },
+//     productsFail(state, action) {
+//       return {
+//           loading: false,
+//           products: action.payload};
+//     }
+//   }
+// });
 
-const { actions, reducer } = productsSlice;
-export const { productsRequest, productsSuccess, productsFailure } = actions;
-export default reducer;
-
-
-
+// const { actions, reducer } = productsSlice;
+// export const { productsRequest, productsSuccess, productsFail } = actions;
+// export default reducer;
 
 
 // Store - Holds all the app’s data (state) in one place
@@ -37,3 +34,34 @@ export default reducer;
 // Reducer - function that updates the state based on the action
 // Dispatch - Sends an action to the reducer to update the store
 // Selector - A way to read data from the store in your component
+
+
+import { createSlice } from "@reduxjs/toolkit";
+
+const productsSlice = createSlice({
+  name: "products",
+  initialState: {
+    loading: false,
+    products: [],   // ✅ always start with an array
+    error: null     // ✅ to handle errors
+  },
+  reducers: {
+    productsRequest(state) {
+      state.loading = true;
+      state.error = null;
+      state.products = []; // optional: reset products during loading
+    },
+    productsSuccess(state, action) {
+      state.loading = false;
+      state.products = action.payload.products; // make sure payload has `.products`
+    },
+    productsFail(state, action) {
+      state.loading = false;
+      state.error = action.payload;  // ✅ store error string
+    }
+  }
+});
+
+const { actions, reducer } = productsSlice;
+export const { productsRequest, productsSuccess, productsFail } = actions;
+export default reducer;

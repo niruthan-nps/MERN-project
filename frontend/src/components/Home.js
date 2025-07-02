@@ -6,15 +6,24 @@ import { useEffect } from "react";
 import { getProducts } from "../actions/productsActions";
 import Loader from "./layouts/Loader";
 import Product from "./product/Product";
+import { toast } from "react-toastify";
+import { POSITION } from 'react-toastify';
+
 
 export default function Home() {
 
     const dispatch = useDispatch();
-    const { products,loading } = useSelector((state) => state.productsState);
+    const { products,loading,error } = useSelector((state) => state.productsState);
 
-    useEffect(() => {
+
+   useEffect(() => {
+
+    if (error) {
+        return toast.error(error)
+    }
         dispatch(getProducts());
-    }, [dispatch]);
+    }, [error,dispatch]);
+
 
 
   return (
