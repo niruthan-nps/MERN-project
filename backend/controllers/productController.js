@@ -11,9 +11,13 @@ exports.getProducts = async (req,res,next) => {
     const products = await apifeatures.query;
     // await new Promise(resolve => setTimeout(resolve, 3000)); // Simulate a delay of 1 second
     //  return next(new ErrorHandler('This is a custom error message for testing error', 400));
+
+    const totalProductsCount = await Product.countDocuments({});
+
     res.status(200).json({
         success: true,
-        count : products.length,
+        count : totalProductsCount,
+        resPerPage,
         products
     });
 }
