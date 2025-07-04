@@ -1,4 +1,4 @@
-import { loginFail, loginRequest, loginSuccess } from "../slices/authSlice";
+import { loginFail, loginRequest, loginSuccess, clearError } from "../slices/authSlice";
 import axios from "axios";
 
 export const login = (email, password) => async (dispatch) => {
@@ -12,3 +12,7 @@ export const login = (email, password) => async (dispatch) => {
         dispatch(loginFail(error.response.data.message || error.message));
     }
 }
+
+export const clearAuthError = () => async (dispatch) => {
+    dispatch(clearError());
+};
