@@ -19,7 +19,7 @@ import axios from 'axios';
 import { productsFail, productsRequest, productsSuccess } from '../slices/productsSlice';
 
 // Accept page number (default to 1 if not provided)
-export const getProducts = (keyword, price, page = 1) => async (dispatch) => {
+export const getProducts = (keyword, price, category, page = 1) => async (dispatch) => {
   try {
     dispatch(productsRequest());
 
@@ -33,6 +33,11 @@ export const getProducts = (keyword, price, page = 1) => async (dispatch) => {
     if(price){
       // If price range is provided, append it to the link
       link += `&price[gte]=${price[0]}&price[lte]=${price[1]}`;
+    }
+
+    if (category) {
+      // If category is provided, append it to the link
+      link += `&category=${category}`;
     }
 
     // Send page number as query param

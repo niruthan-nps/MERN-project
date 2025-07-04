@@ -12,7 +12,6 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Tooltip from "rc-tooltip";
 import'rc-tooltip/assets/bootstrap.css'
-import { set } from "mongoose";
 
 export default function ProductSearch() {
   const dispatch = useDispatch();
@@ -21,8 +20,24 @@ export default function ProductSearch() {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState([1, 1000]); 
-  const [priceChanged, setPriceChanged] = useState(price); // Default price range
+  const [priceChanged, setPriceChanged] = useState(price);
+  const [category, setcategory]  = useState(null);
+  
+
   const { keyword } = useParams();
+
+  const categories = ['Electronics',
+                'Mobile Phones',
+                'Laptops',
+                'Accessories',
+                'Headphones',
+                'Food',
+                'Books',
+                'Clothes/Shoes',
+                'Beauty/Health',
+                'Sports',
+                'Outdoor',
+                'Home',];
 
 
 
@@ -36,8 +51,8 @@ export default function ProductSearch() {
       return;
     }
 
-    dispatch(getProducts(keyword, price, currentPage)); // ✅ Pass current page to action
-  }, [dispatch, error, currentPage, keyword, priceChanged]); // ✅ Add currentPage to dependency array
+    dispatch(getProducts(keyword, price, category, currentPage)); // ✅ Pass current page to action
+  }, [dispatch, error, currentPage, keyword, priceChanged,category]); // ✅ Add currentPage to dependency array
 
   return (
     <Fragment>
@@ -53,6 +68,8 @@ export default function ProductSearch() {
 
             <div className="row">
                 <div className="col-6 col-md-3 mb-5 mt-5">
+
+                    {/* Price Filter */}
                     <div className="px-5" onMouseUp={() => setPriceChanged(price)}>
                         <Slider
                             range={true}
@@ -79,6 +96,31 @@ export default function ProductSearch() {
                             }
                             />
                     </div>
+
+                    <hr className="my-5"/>
+
+                    {/* Range Filter */}
+                    <div className="mt-5">
+                        <h3 className="mb-3">Categories</h3>
+                            <ul className="pl-0">
+                                {categories.map(category => 
+                                <li style={{
+                                    cursor: "pointer",
+                                    listStyle: "none",
+                                }}
+                                key={category}
+                                onClick={() => {
+                                    setcategory(category)}}
+                                    >
+                                    {category}
+                                </li>)}
+                                
+
+                            </ul>
+
+                    </div>
+
+
                 </div>
                     <div className="col-6 col-md-9">
                         <div className="row">
