@@ -103,7 +103,7 @@ export default function Home() {
       return;
     }
 
-    dispatch(getProducts(null,null, null, currentPage)); // ✅ Pass current page to action
+    dispatch(getProducts(null,null, null, null, currentPage)); // ✅ Pass current page to action
   }, [dispatch, error, currentPage]); // ✅ Add currentPage to dependency array
 
   return (
