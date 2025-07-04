@@ -103,7 +103,7 @@ export default function Home() {
       return;
     }
 
-    dispatch(getProducts(null, currentPage)); // ✅ Pass current page to action
+    dispatch(getProducts(null,null, currentPage)); // ✅ Pass current page to action
   }, [dispatch, error, currentPage]); // ✅ Add currentPage to dependency array
 
   return (
@@ -120,7 +120,7 @@ export default function Home() {
             <div className="row">
               {products &&
                 products.map((product) => (
-                  <Product key={product._id} product={product} />
+                  <Product col={3} key={product._id} product={product} />
                 ))}
             </div>
           </section>
