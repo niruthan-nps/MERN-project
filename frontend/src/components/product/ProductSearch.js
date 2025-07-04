@@ -8,6 +8,11 @@ import Product from "../product/Product";
 import { toast } from "react-toastify";
 import Pagination from "react-js-pagination";
 import { useParams } from "react-router-dom";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import Tooltip from "rc-tooltip";
+import'rc-tooltip/assets/bootstrap.css'
+import { set } from "mongoose";
 
 export default function ProductSearch() {
   const dispatch = useDispatch();
@@ -15,6 +20,8 @@ export default function ProductSearch() {
     (state) => state.productsState
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const [price, setPrice] = useState([1, 1000]); 
+  const [priceChanged, setPriceChanged] = useState(price); // Default price range
   const { keyword } = useParams();
 
 
@@ -29,8 +36,8 @@ export default function ProductSearch() {
       return;
     }
 
-    dispatch(getProducts(keyword, currentPage)); // ✅ Pass current page to action
-  }, [dispatch, error, currentPage, keyword]); // ✅ Add currentPage to dependency array
+    dispatch(getProducts(keyword, price, currentPage)); // ✅ Pass current page to action
+  }, [dispatch, error, currentPage, keyword, priceChanged]); // ✅ Add currentPage to dependency array
 
   return (
     <Fragment>
@@ -43,12 +50,46 @@ export default function ProductSearch() {
           <h1 id="products_heading">Search Products</h1>
 
           <section id="products" className="container mt-5">
+
             <div className="row">
-              {products &&
-                products.map((product) => (
-                  <Product key={product._id} product={product} />
-                ))}
-            </div>
+                <div className="col-6 col-md-3 mb-5 mt-5">
+                    <div className="px-5" onMouseUp={() => setPriceChanged(price)}>
+                        <Slider
+                            range={true}
+                            marks={
+                                {
+                                    1: "$1",
+                                    1000: "$1000"
+                                }
+                            }
+                            min={1}
+                            max={1000}
+                            defaultValue={price}
+                            onChange={(price) => {
+                                setPrice(price);
+                            }}
+                            handleRender={
+                                renderProps => {
+                                    return (
+                                        <Tooltip overlay={`$${renderProps.props['aria-valuenow']}`}>
+                                        <div {...renderProps.props}></div>
+                                        </Tooltip>
+                                    );
+                                }
+                            }
+                            />
+                    </div>
+                </div>
+                    <div className="col-6 col-md-9">
+                        <div className="row">
+                            {products &&
+                            products.map((product) => (
+                            <Product col={4} key={product._id} product={product} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+              
           </section>
 
           {productsCount > resPerPage && (
