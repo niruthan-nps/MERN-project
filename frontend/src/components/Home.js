@@ -80,7 +80,7 @@ import { Fragment } from "react/jsx-runtime";
 import MetaData from "./layouts/MetaData";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getProducts } from "../actions/productsActions";
+import { getProducts } from "../actions/productActions";
 import Loader from "./layouts/Loader";
 import Product from "./product/Product";
 import { toast } from "react-toastify";
