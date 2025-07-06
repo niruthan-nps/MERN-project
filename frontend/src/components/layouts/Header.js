@@ -63,14 +63,23 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import React from "react";
 import { Dropdown, Figure, Image } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { logout } from "../../actions/userActions";
 
 export default function Header() {
   const { user, isAuthenticated } = useSelector((state) => state.authState || {});
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+    // Dispatch the logout action here
+    dispatch(logout);
+    console.log("User logged out");
+  };
 
-  if (user) {
-  console.log("User name:", user.name);
-  console.log("Avatar URL:", user.avatar);
-}
+
+//   if (user) {
+//   console.log("User name:", user.name);
+//   console.log("Avatar URL:", user.avatar);
+// }
 
   return (
     <nav className="navbar row">
@@ -102,7 +111,7 @@ export default function Header() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item className="text-danger">Log out</Dropdown.Item>
+              <Dropdown.Item className="text-danger" onClick={logoutHandler}>Log out</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         ) : (
