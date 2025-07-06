@@ -8,7 +8,10 @@ import { loginFail,
         loadUserSuccess,
         loadUserFail,
         logoutSuccess,
-        logoutFail} from "../slices/authSlice";
+        logoutFail,
+        updateProfileRequest,
+        updateProfileSuccess,
+        updateProfileFail} from "../slices/authSlice";
 import axios from "axios";
 
 export const login = (email, password) => async (dispatch) => {
@@ -83,5 +86,23 @@ export const logout = async (dispatch) => {
         dispatch(logoutSuccess());
     } catch (error) {
         dispatch(logoutFail(error.response.data.message || error.message));
+    }
+}
+
+export const updateProfile = (userData) => async (dispatch) => {
+    try {
+        dispatch(updateProfileRequest());
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        };
+
+        const { data } = await axios.put(`/api/v1/update`, userData, config); // ✅ FIXED
+
+        dispatch(updateProfileSuccess(data));
+    } catch (error) {
+        dispatch(updateProfileFail(error.response.data.message || error.message));
     }
 }
