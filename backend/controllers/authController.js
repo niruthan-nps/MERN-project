@@ -10,7 +10,18 @@ const crypto = require('crypto')
 //register user - api/v1/register
 exports.registerUser = catchAsyncError(async (req,res,next) => {
     
-    const {name,email,password,avatar} = req.body
+    const {name,email,password} = req.body
+
+    let avatar;
+    if(req.file){
+        avatar = `${process.env.BACKEND_URL}/uploads/user/${req.file.originalname}`;
+        //req.protocol gets the protocol used (http or https)
+        //req.get('host') gets the host name (domain or localhost)
+    }
+    // else{
+    //     avatar = `${req.protocol}://${req.get('host')}/uploads/user/default_avatar.png`;
+    //     //if no avatar is uploaded, use a default avatar
+    // }
     const user = await User.create({
         name,
         email,

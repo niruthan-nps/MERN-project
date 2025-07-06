@@ -6,7 +6,7 @@ node_modules/
 
 config/config.env
 config.env
-
+backend/config/config.env
 # Logs
 logs
 *.log

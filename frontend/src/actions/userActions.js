@@ -22,6 +22,24 @@ export const clearAuthError = () => async (dispatch) => {
     dispatch(clearError());
 }
 
+// export const register = (userData) => async (dispatch) => {
+//     try {
+//         dispatch(registerRequest());
+
+//         const config = {
+//             headers: {
+//                 'Content-Type': 'multipart/form-data'
+//             }
+//         };
+
+//         const { data } = await axios.post(`/api/v1/register`,{ userData, config });
+
+//         dispatch(registerSuccess(data));
+//     } catch (error) {
+//         dispatch(registerFail(error.response.data.message || error.message));
+//     }
+// }
+
 export const register = (userData) => async (dispatch) => {
     try {
         dispatch(registerRequest());
@@ -32,7 +50,7 @@ export const register = (userData) => async (dispatch) => {
             }
         };
 
-        const { data } = await axios.post(`/api/v1/register`,{ userData, config });
+        const { data } = await axios.post(`/api/v1/register`, userData, config); // ✅ FIXED
 
         dispatch(registerSuccess(data));
     } catch (error) {

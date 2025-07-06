@@ -6,7 +6,7 @@ import { clearAuthError, login } from "../../actions/userActions"; // Adjust the
 import { useSelector } from "react-redux"; // Import useSelector to access the Redux state
 import { useEffect } from "react";
 import { toast } from "react-toastify"; // Import toast for error notifications
-import { useNavigate } from "react-router-dom"; // Import useNavigate to redirect after login
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate to redirect after login
 
 
 export default function Login() {
@@ -77,7 +77,7 @@ export default function Login() {
                 LOGIN
                 </button>
 
-                <a href="#" className="float-right mt-3">New User?</a>
+                <Link to="/register" className="float-right mt-3">New User?</Link>
             </form>
             </div>
             </div>
