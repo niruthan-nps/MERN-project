@@ -65,10 +65,12 @@ import React from "react";
 import { Dropdown, Figure, Image } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { logout } from "../../actions/userActions";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const { user, isAuthenticated } = useSelector((state) => state.authState || {});
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const logoutHandler = () => {
     // Dispatch the logout action here
     dispatch(logout);
@@ -111,7 +113,10 @@ export default function Header() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
+              <Dropdown.Item className="text-danger" onClick={() => {navigate('/myprofile')}}>My Profile</Dropdown.Item>
               <Dropdown.Item className="text-danger" onClick={logoutHandler}>Log out</Dropdown.Item>
+              
+
             </Dropdown.Menu>
           </Dropdown>
         ) : (
