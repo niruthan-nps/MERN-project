@@ -4,40 +4,69 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     loading: false,
-    isAuthenticated: false
+    isAuthenticated: false,
+    user: null,
+    error: null
   },
   reducers: {
-    loginRequest(state,action) {
-        return{
-            ...state,
-            loading: true
-        }
+    loginRequest(state, action) {
+      return {
+        ...state,
+        loading: true
+      };
     },
     loginSuccess(state, action) {
-        return{
-            loading:false,
-            isAuthenticated:true,
-            user:action.payload.user
-        }
+      return {
+        loading: false,
+        isAuthenticated: true,
+        user: action.payload.user
+      };
     },
     loginFail(state, action) {
-        return{
-            ...state,
-            loading:false,
-            error:action.payload
-            
-        }
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
+      };
     },
     clearError(state, action) {
-        return{
-            ...state,
-            error:null
-            
-        }
+      return {
+        ...state,
+        error: null
+      };
+    },
+    registerRequest(state, action) {
+      return {
+        ...state,
+        loading: true
+      };
+    },
+    registerSuccess(state, action) {
+      return {
+        loading: false,
+        isAuthenticated: true,
+        user: action.payload.user
+      };
+    },
+    registerFail(state, action) {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
+      };
     }
   }
 });
 
 const { actions, reducer } = authSlice;
-export const { loginRequest, loginSuccess, loginFail, clearError } = actions;
+export const {
+  loginRequest,
+  loginSuccess,
+  loginFail,
+  clearError,
+  registerRequest,
+  registerSuccess,
+  registerFail
+} = actions;
+
 export default reducer;

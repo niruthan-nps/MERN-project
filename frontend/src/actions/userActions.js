@@ -1,4 +1,9 @@
-import { loginFail, loginRequest, loginSuccess, clearError } from "../slices/authSlice";
+import { loginFail, 
+        loginRequest, 
+        loginSuccess, clearError, 
+        registerSuccess, 
+        registerFail, 
+        registerRequest } from "../slices/authSlice";
 import axios from "axios";
 
 export const login = (email, password) => async (dispatch) => {
@@ -15,4 +20,22 @@ export const login = (email, password) => async (dispatch) => {
 
 export const clearAuthError = () => async (dispatch) => {
     dispatch(clearError());
-};
+}
+
+export const register = (userData) => async (dispatch) => {
+    try {
+        dispatch(registerRequest());
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        };
+
+        const { data } = await axios.post(`/api/v1/register`,{ userData, config });
+
+        dispatch(registerSuccess(data));
+    } catch (error) {
+        dispatch(registerFail(error.response.data.message || error.message));
+    }
+}
