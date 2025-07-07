@@ -14,7 +14,13 @@ import { loginFail,
         updateProfileFail,
         updatePasswordRequest,
         updatePasswordSuccess,
-        updatePasswordFail} from "../slices/authSlice";
+        updatePasswordFail,
+        forgotPasswordRequest,
+        forgotPasswordFail,
+        resetPasswordRequest,
+        resetPasswordSuccess,
+        resetPasswordFail,
+        forgotPasswordSuccess} from "../slices/authSlice";
 import axios from "axios";
 
 export const login = (email, password) => async (dispatch) => {
@@ -125,5 +131,41 @@ export const updatePassword = (formData) => async (dispatch) => {
         dispatch(updatePasswordSuccess());
     } catch (error) {
         dispatch(updatePasswordFail(error.response.data.message || error.message));
+    }
+}
+
+export const forgotPassword = (formData) => async (dispatch) => {
+    try {
+        dispatch(forgotPasswordRequest());
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const { data } = await axios.post(`/api/v1/password/forgot`, formData, config);
+
+        dispatch(forgotPasswordSuccess(data));
+    } catch (error) {
+        dispatch(forgotPasswordFail(error.response.data.message || error.message));
+    }
+}
+
+export const resetPassword = (formData, token) => async (dispatch) => {
+    try {
+        dispatch(resetPasswordRequest());
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const { data } = await axios.post(`/api/v1/password/reset/${token}`, formData, config);
+
+        dispatch(resetPasswordSuccess(data));
+    } catch (error) {
+        dispatch(resetPasswordFail(error.response.data.message || error.message));
     }
 }
