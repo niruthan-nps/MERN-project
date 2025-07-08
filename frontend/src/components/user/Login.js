@@ -35,7 +35,7 @@ export default function Login() {
             onOpen: () => {dispatch(clearAuthError())}
         });
     }
-    }, [error, isAuthenticated, dispatch]); // Add isAuthenticated and navigate to dependencies
+    }, [error, isAuthenticated, dispatch, navigate]); // Add isAuthenticated and navigate to dependencies
 
   return (
     <Fragment>

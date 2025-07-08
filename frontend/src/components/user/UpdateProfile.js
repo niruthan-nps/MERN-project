@@ -164,11 +164,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateProfile, clearAuthError } from '../../actions/userActions';
 import { toast } from 'react-toastify';
+import { clearUpdateProfile } from '../../slices/authSlice';
 
 export default function UpdateProfile() {
 
 
-    const { loading, error, user, isUpdated } = useSelector((state) => state.authState || {});
+    const { error, user, isUpdated } = useSelector((state) => state.authState || {});
 
     const [ name, setName ] = useState('');
     const [ email, setEmail ] = useState('');
@@ -177,7 +178,7 @@ export default function UpdateProfile() {
     const dispatch = useDispatch();
 
     const onChangeAvatar = (e) => {
-        const reader = new FileReader;
+        const reader = new FileReader();
             reader.onload = () => {
                 if (reader.readyState === 2) {
                     setAvatarPreview(reader.result);
@@ -208,7 +209,10 @@ export default function UpdateProfile() {
         }
         if (isUpdated) {
             toast("Profile updated successfully", {
-                type: "success"
+                type: "success",
+                onOpen: () => {
+                    dispatch(clearUpdateProfile());
+                }
             });
             return;
         }
@@ -221,7 +225,7 @@ export default function UpdateProfile() {
             });
             return;
         }
-    }, [user, isUpdated, error,dispatch]);
+    }, [user, isUpdated, error, dispatch]);
 
 
     return (
