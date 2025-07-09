@@ -1,9 +1,26 @@
 import { Fragment } from "react/jsx-runtime";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { decreaseCartItemQuantity, increaseCartItemQuantity, removeItemFromCart } from "../../slices/cartSlice";
+import { useDispatch } from "react-redux"; // Import useDispatch to dispatch actions
+
 
 export default function Cart() {
   const { items } = useSelector(state => state.cartState);
+  const dispatch = useDispatch();
+
+  const increaseQty = (item) => {
+    const count = item.quantity;
+    if(item.stock === 0 || count >= item.stock) return;
+    dispatch(increaseCartItemQuantity(item.product));
+  };
+
+  const decreaseQty = (item) => {
+    const count = item.quantity;
+    if(count === 1) return;
+    dispatch(decreaseCartItemQuantity(item.product));
+  };
+
 
   return (
     <Fragment>
@@ -43,20 +60,21 @@ export default function Cart() {
 
                                 <div className="col-4 col-lg-3 mt-4 mt-lg-0">
                                     <div className="stockCounter d-inline">
-                                    <span className="btn btn-danger minus">-</span>
+                                    <span className="btn btn-danger minus" onClick={() => decreaseQty(item)}>-</span>
                                     <input
                                         type="number"
                                         className="form-control count d-inline"
-                                        value="1"
+                                        value={item.quantity}
                                         readOnly
                                     />
-                                    <span className="btn btn-primary plus">+</span>
+                                    <span className="btn btn-primary plus" onClick={() => increaseQty(item)}>+</span>
                                     </div>
                                 </div>
 
                                 <div className="col-4 col-lg-1 mt-4 mt-lg-0">
                                     <i
                                     id="delete_cart_item"
+                                    onClick={() => dispatch(removeItemFromCart(item.product))}
                                     className="fa fa-trash btn btn-danger"
                                     ></i>
                                 </div>
@@ -73,11 +91,11 @@ export default function Cart() {
                 <hr />
                 <p>
                   Subtotal:{" "}
-                  <span className="order-summary-values">1 (Units)</span>
+                  <span className="order-summary-values">{items.reduce ((acc, item) => (acc + item.quantity) , 0)} (Units)</span>
                 </p>
                 <p>
                   Est. total:{" "}
-                  <span className="order-summary-values">$245.67</span>
+                  <span className="order-summary-values">${items.reduce ((acc, item) => (acc + item.quantity * item.price) , 0)}</span>
                 </p>
                 <hr />
                 <button
