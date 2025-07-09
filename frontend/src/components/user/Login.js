@@ -6,7 +6,7 @@ import { clearAuthError, login } from "../../actions/userActions"; // Adjust the
 import { useSelector } from "react-redux"; // Import useSelector to access the Redux state
 import { useEffect } from "react";
 import { toast } from "react-toastify"; // Import toast for error notifications
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate to redirect after login
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useNavigate to redirect after login
 
 
 export default function Login() {
@@ -16,6 +16,8 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // Import useNavigate to redirect after login
     const { loading, error,isAuthenticated } = useSelector((state) => state.authState); // Adjust the state slice name as necessary
+    const location = useLocation(); // Get the current location to handle redirects
+    const redirect = location.search?'/'+location.search.split('=')[1] : '/'; // Get redirect path from URL or default to home
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -27,7 +29,7 @@ export default function Login() {
     useEffect(() => {
 
     if (isAuthenticated) {
-        navigate('/'); // Redirect to account page if authenticated
+        navigate(redirect); // Redirect to account page if authenticated
     }
     if (error) {
         toast(error,{
