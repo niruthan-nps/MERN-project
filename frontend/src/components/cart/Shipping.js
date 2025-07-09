@@ -4,6 +4,24 @@ import { countries } from "countries-list"
 import { useNavigate } from "react-router-dom";
 import { saveShippingInfo } from "../../slices/cartSlice";
 import CheckoutSteps from "./CheckoutSteps";
+import { toast } from "react-toastify";
+
+
+export const validateShipping = () => {
+    const { shippingInfo }= useSelector(state => state.cartState);
+    const navigate = useNavigate();
+
+    if(!shippingInfo.address || 
+        !shippingInfo.city || 
+        !shippingInfo.phoneNo || 
+        !shippingInfo.postalCode || 
+        !shippingInfo.country || 
+        !shippingInfo.state) {
+            toast.error("Please fill all the fields in Shipping Info");
+            navigate("/shipping");
+    }
+
+}
 
 export default function Shipping() {
 
