@@ -12,6 +12,8 @@
   "author": "Niru",
   "license": "ISC",
   "dependencies": {
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.4.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "crypto": "^1.0.1",
