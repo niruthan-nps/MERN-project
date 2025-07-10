@@ -7,9 +7,8 @@ import CheckoutSteps from "./CheckoutSteps";
 import { toast } from "react-toastify";
 
 
-export const validateShipping = () => {
-    const { shippingInfo }= useSelector(state => state.cartState);
-    const navigate = useNavigate();
+export const validateShipping = ( shippingInfo, navigate) => {
+    
 
     if(!shippingInfo.address || 
         !shippingInfo.city || 
@@ -49,7 +48,7 @@ export default function Shipping() {
   return (
 
             <Fragment>
-                <CheckoutSteps/>
+                <CheckoutSteps shipping/>
                 <div className="row wrapper">
                 <div className="col-10 col-lg-5">
                     <form onSubmit={submitHandler} className="shadow-lg">
