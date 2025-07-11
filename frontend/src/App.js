@@ -38,6 +38,7 @@ const [stripeApiKey, setStripeApiKey] = useState("");
       const { data } = await axios.get('/api/v1/stripeapi')
       setStripeApiKey(data.stripeApiKey)
     }
+    getStripeApiKey()
   }, [])
 
     
@@ -63,7 +64,8 @@ const [stripeApiKey, setStripeApiKey] = useState("");
               <Route path='/cart' element={<Cart />} />
               <Route path='/shipping' element={<ProtectedRoute><Shipping /></ProtectedRoute>} />
               <Route path='/order/confirm' element={<ProtectedRoute><ConfirmOrder /></ProtectedRoute>} />
-              <Route path='/payment' element={<ProtectedRoute><Elements stripe={loadStripe(stripeApiKey)}><Payment /></Elements></ProtectedRoute>} />
+
+              {stripeApiKey && <Route path='/payment' element={<ProtectedRoute><Elements stripe={loadStripe(stripeApiKey)}><Payment /></Elements></ProtectedRoute>} />}
               
               {/* Add other routes here */}
             </Routes>
