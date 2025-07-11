@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { orderCompleted } from "../../slices/cartSlice";
 import { clearError as clearOrderError } from "../../slices/orderSlice";
-import { createOrder } from '../../actions/orderAction';
+import { createOrder } from '../../actions/orderActions';
 
 export default function Payment() {
     const stripe = useStripe();
